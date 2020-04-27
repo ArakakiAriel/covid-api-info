@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 
-require('./app/config/config'); //Archivo de configuraciones, de esta forma se levanta automáticamente y lo corre
+const config = require('./app/config/config'); //Archivo de configuraciones, de esta forma se levanta automáticamente y lo corre
 
 const app = express();
 
@@ -14,18 +14,31 @@ app.use(bodyParser.urlencoded({ extended: false })); //Middleware cuando es app.
 app.use(bodyParser.json());
 
 //Configuracion globar de rutas
-//app.use(require('./routes/info'));
+//app.use(require('./routes/index'));
 
-mongoose.connect(process.env.URLDB,
-        {useNewUrlParser:true, useCreateIndex:true}, //Configuraciones a la hora de hacer la conexion a mongo
-        (err, res) => {
-    if(err) throw err;
 
-    console.log('Database: ' + 'ONLINE'.green);
-
-});
+const mongoOptions = {
+    useNewUrlParser:true,
+    useCreateIndex:true
+}
+mongoose.connect(process.env.URLDB, mongoOptions);
 mongoose.set("useFindAndModify", false);
 mongoose.set("useCreateIndex", true);
+
+
+mongoose.connection.on('connected', () => {
+    console.log('MONGO CONNNECTED'.green);
+  });
+  
+mongoose.connection.on('disconnected', () => {
+    console.log('MONGO DISCONNECTED'.red);
+    if (mongoose.connection.readyState === 0) {
+      mongoose.connection.readyState = 2;
+      setTimeout(() => {
+        mongoose.connect(process.env.URLDB, mongoOptions);
+      }, config.mongo.reconnection_interval);
+    }
+});
 
 
 app.listen(process.env.PORT, () => {
