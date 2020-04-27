@@ -1,8 +1,15 @@
 
 const RESPONSE_OK_STATUS_MESSAGE = 'OK';
 const RESPONSE_NOK_STATUS_MESSAGE = 'error';
+const REDIS_CONNECTION_ERROR = 'Error connecting to Redis';
+const REDIS_CONNECTION_OK = 'Redis connection OK';
+const REDIS_CONNECTION_READY = 'Ready connect to redis';
 
 module.exports = {
     RESPONSE_OK_STATUS_MESSAGE,
     RESPONSE_NOK_STATUS_MESSAGE,
+    REDIS_CONNECTION_ERROR,
+    REDIS_CONNECTION_OK,
+    REDIS_CONNECTION_READY,
+    
 }

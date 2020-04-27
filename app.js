@@ -53,3 +53,10 @@ app.use(`/api/covid/info`, infoRoute);
 app.listen(process.env.PORT, () => {
     console.log("Listening on port ", process.env.PORT);
 });
+
+
+(() => {
+    // if one of the dependencies does not response the ms can not start
+    require('./app/services/redis/init-redis-connection'); // eslint-disable-line
+  })();
+  
