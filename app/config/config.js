@@ -33,6 +33,11 @@ process.env.URLDB = urlDB;
 module.exports = {
     mongo: {
       reconnection_interval: process.env.MONGO_RECONNECTION_INTERVAL || 3000
+    },
+    timeouts: {
+        timer_default: process.env.TIMEOUT_TIMER_DEFAULT || 3000,
+        timer_post_mongo: process.env.TIMER_POST_MONGO || 5000,
+
     }
 };
   

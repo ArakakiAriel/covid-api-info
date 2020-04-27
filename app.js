@@ -7,6 +7,8 @@ const path = require('path');
 const config = require('./app/config/config'); //Archivo de configuraciones, de esta forma se levanta automáticamente y lo corre
 
 const app = express();
+const databaseRoute = require('./app/routes/database-route');
+const infoRoute = require('./app/routes/info-route');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false })); //Middleware cuando es app.use
@@ -19,7 +21,8 @@ app.use(bodyParser.json());
 
 const mongoOptions = {
     useNewUrlParser:true,
-    useCreateIndex:true
+    useCreateIndex:true,
+    useUnifiedTopology: true 
 }
 mongoose.connect(process.env.URLDB, mongoOptions);
 mongoose.set("useFindAndModify", false);
@@ -39,6 +42,12 @@ mongoose.connection.on('disconnected', () => {
       }, config.mongo.reconnection_interval);
     }
 });
+
+
+// covid routing
+//app.use(`/api/covid/database`, databaseRoute);
+app.use(`/api/covid/info`, infoRoute);
+
 
 
 app.listen(process.env.PORT, () => {

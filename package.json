@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "local-default": "NODE_ENV=local NODE_ENV_CONTEXT=default node app.js"
   },
   "repository": {
     "type": "git",
@@ -19,7 +20,9 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "colors": "^1.4.0",
+    "connect-timeout": "^1.9.0",
     "express": "^4.17.1",
+    "lodash.camelcase": "^4.3.0",
     "mongoose": "^5.9.10",
     "path": "^0.12.7"
   }
