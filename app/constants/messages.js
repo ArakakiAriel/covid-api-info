@@ -8,6 +8,7 @@ const EXISTING_COUNTRY_KEY = 'There is already a country with the same name';
 const RESPONSE_OK_CREATED = 'Created successfully';
 const INTERNAL_ERROR = 'Internal Error Not Handled';
 const MONGO_ENTITY_NOT_FOUND = 'Entity not found';
+const INVALID_URL = 'Invalid URL';
 
 module.exports = {
     RESPONSE_OK_STATUS_MESSAGE,
@@ -18,8 +19,6 @@ module.exports = {
     EXISTING_COUNTRY_KEY,
     RESPONSE_OK_CREATED,
     INTERNAL_ERROR,
-    
-
-
-    
+    MONGO_ENTITY_NOT_FOUND,
+    INVALID_URL,  
 }

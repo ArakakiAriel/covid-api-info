@@ -1,7 +1,6 @@
 const commonResponse = require('../utils/common-response');
 const codes = require('../constants/constants');
 const messages = require('../constants/messages');
-const logger = require('fif-common-node-logger').Logger.getLogger();
 
 class Controller {
   constructor(facade) {
@@ -56,18 +55,6 @@ class Controller {
       return commonResponse.setResponseWithError(res, codes.INTERNAL_ERROR,
         messages.INTERNAL_ERROR);
     }
-  }
-
-  findById(req, res) {
-    return this.facade
-      .findById(req.params.id)
-      .then((doc) => {
-        if (!doc) {
-          return res.sendStatus(codes.NOT_FOUND_ERROR);
-        }
-        return res.status(200).json(doc);
-      })
-      .catch(err => res.send(err.status || codes.INTERNAL_ERROR, err.json || err));
   }
 
   getUpdateOptions(executionParams) {

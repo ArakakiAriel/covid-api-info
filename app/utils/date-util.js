@@ -38,15 +38,12 @@ function getFullDate(day, month, year) {
     };
 }
 
-function formatCertainDate(date, sql){
+function formatCertainDate(date){
     let year = date.year;
     let month = date.month;
     let day = date.day;    
 
-    if(sql){
-        return year+"-"+month+"-"+day;
-    }
-    return year+month+day;
+    return year+"-"+month+"-"+day;
 }
 
 module.exports = {

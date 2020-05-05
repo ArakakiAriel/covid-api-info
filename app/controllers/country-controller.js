@@ -4,4 +4,4 @@ const countryFacade = require('../facades/country-facade');
 class CountryController extends Controller {
 }
 
-module.exports = new CountryController(countryFacade());
+module.exports = new CountryController(countryFacade(globalCollectionName));
