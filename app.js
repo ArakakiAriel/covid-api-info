@@ -3,12 +3,15 @@ const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const dateUtil = require('./app/utils/date-util');
 
 const config = require('./app/config/config'); //Archivo de configuraciones, de esta forma se levanta automáticamente y lo corre
 
 const app = express();
 const databaseRoute = require('./app/routes/database-route');
 const infoRoute = require('./app/routes/info-route');
+
+global.globalDate = dateUtil.getFullDate();
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false })); //Middleware cuando es app.use

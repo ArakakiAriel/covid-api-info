@@ -5,6 +5,6 @@ const setResponseRaw = require('../utils/common-response').setResponseRaw;
 
 module.exports.getBasicStatistics = (req, res) => {
     
-    return setResponseRaw(res, 200, {muchos: "mensajes"});
+    return setResponseRaw(res, 200, {globalDate});
   };
   

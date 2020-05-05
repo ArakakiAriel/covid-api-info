@@ -16,6 +16,12 @@ function setResponseRaw(res, status, message) {
   return res.status(status).send(message);
 }
 
+function setResponseWithOkWithMarshaller(res, status, message, data, marshaller,
+  code = messages.RESPONSE_OK_STATUS_MESSAGE) {
+  return res.status(status).send({ code, message, data: marshaller(data) });
+}
+
+module.exports.setResponseWithOkWithMarshaller = setResponseWithOkWithMarshaller;
 module.exports.setResponseWithError = setResponseWithError;
 module.exports.setResponseWithOk = setResponseWithOk;
 module.exports.setResponseRaw = setResponseRaw;
