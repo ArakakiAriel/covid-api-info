@@ -5,10 +5,11 @@ const RedisService = require('../services/redis/redis-service');
 const {formatCertainDate} = require('../utils/date-util');
 var fs = require('fs');
 const {BigQuery} = require('@google-cloud/bigquery');
+const setResponseWithError = require('../utils/common-response').setResponseWithError;
 
 const redis = new RedisService();
 
-module.exports.runBigQuery = async (req, res, next) => {
+module.exports.getCasesPerDate = async (req, res, next) => {
     let formatedDate = formatCertainDate(req.date);
     global.globalCollectionName = `results-${formatedDate}`;
     console.log(globalCollectionName);
@@ -41,7 +42,20 @@ module.exports.runBigQuery = async (req, res, next) => {
     
         // Run the query
         const [globalCases] = await bigqueryClient.query(options);
-    
+        
+        if(!globalCases){
+            return setResponseWithError(res, constants.NOT_FOUND_ERROR, messages.NOT_RESULT_FOUND);
+        }
+
+        //Data normalizer
+        for(let i = 0; i < globalCases.length; i++){
+            globalCases[i].country = globalCases[i].country.toUpperCase();
+            globalCases[i].position_in_table = i + 1;
+            let lastUpdate = globalCases[i].last_update.value;
+            globalCases[i].last_update = {};
+            globalCases[i].last_update = lastUpdate;
+        };
+        
         covidDataContent = JSON.stringify(globalCases);
 
         //Save on REDIS

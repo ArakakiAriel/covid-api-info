@@ -13,10 +13,10 @@ module.exports.validateYear = async (req, res, next) => {
             if(req.params.year <= parseInt(todaysDate.year)){
                 return next();
             }
-            return setResponseWithError(res, constants.NOT_FOUND_ERROR, messages.INVALID_YEAR);
+            return setResponseWithError(res, constants.BAD_REQUEST_ERROR, messages.INVALID_YEAR);
         }
         
-        return setResponseWithError(res, constants.NOT_FOUND_ERROR, messages.INVALID_YEAR);
+        return setResponseWithError(res, constants.BAD_REQUEST_ERROR, messages.INVALID_YEAR);
     }
     
 

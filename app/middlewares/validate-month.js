@@ -12,10 +12,10 @@ module.exports.validateMonth = async (req, res, next) => {
             if(req.params.month <= 12){
                 return next();
             }
-            return setResponseWithError(res, constants.NOT_FOUND_ERROR, messages.INVALID_MONTH);
+            return setResponseWithError(res, constants.BAD_REQUEST_ERROR, messages.INVALID_MONTH);
         }
         
-        return setResponseWithError(res, constants.NOT_FOUND_ERROR, messages.INVALID_MONTH);
+        return setResponseWithError(res, constants.BAD_REQUEST_ERROR, messages.INVALID_MONTH);
     }
     
 

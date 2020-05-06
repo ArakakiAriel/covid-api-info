@@ -13,10 +13,10 @@ module.exports.validateDay = async (req, res, next) => {
             if(req.params.day <= monthLength[parseInt(req.params.month) - 1]){
                 return next();
             }
-            return setResponseWithError(res, constants.NOT_FOUND_ERROR, messages.INVALID_DAY);
+            return setResponseWithError(res, constants.BAD_REQUEST_ERROR, messages.INVALID_DAY);
         }
         
-        return setResponseWithError(res, constants.NOT_FOUND_ERROR, messages.INVALID_DAY);
+        return setResponseWithError(res, constants.BAD_REQUEST_ERROR, messages.INVALID_DAY);
     }
     
 

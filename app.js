@@ -13,6 +13,7 @@ const config = require('./app/config/config'); //Archivo de configuraciones, de 
 const app = express();
 //const databaseRoute = require('./app/routes/database-route');
 const casesRoute = require('./app/routes/cases-route');
+const countryCasesRoute = require('./app/routes/country-cases-route');
 
 global.todaysDate = dateUtil.getFullDate();
 global.globalDate = todaysDate;
@@ -54,6 +55,7 @@ mongoose.connection.on('disconnected', () => {
 
 // covid routing
 //app.use(`/api/covid/database`, databaseRoute);
+app.use(`/api/covid/cases/country`, countryCasesRoute);
 app.use(`/api/covid/cases`, casesRoute);
 
 

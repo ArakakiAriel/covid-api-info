@@ -15,6 +15,9 @@ const INVALID_MONTH = 'Invalid Month';
 const MONTH_NOT_FOUND = 'Month not found';
 const INVALID_DAY = 'Invalid Day';
 const DAY_NOT_FOUND = 'Day not found';
+const NOT_RESULT_FOUND = 'Not results where found with the data given';
+const INVALID_COUNTRY = 'Invalid Country';
+const COUNTRY_NOT_FOUND = 'Please put a country to search the data';
 
 module.exports = {
     RESPONSE_OK_STATUS_MESSAGE,
@@ -33,4 +36,7 @@ module.exports = {
     INVALID_MONTH,
     DAY_NOT_FOUND,
     INVALID_DAY,
+    NOT_RESULT_FOUND,
+    INVALID_COUNTRY,
+    COUNTRY_NOT_FOUND
 }

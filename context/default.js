@@ -7,13 +7,13 @@ module.exports = {
       'validate-month',
       'validate-day',
       'set-date',
-      'run-big-query',
+      'get-cases-per-date',
       'get-basic-statistics',
       'show-result-raw'
     ],
     getStatisticsToday: process.env.NODE_CONTEXT_MIDDLEWARES_GET_STATISTICS_TODAY || [
       'set-date',
-      'run-big-query',
+      'get-cases-per-date',
       'get-basic-statistics',
       'show-result-raw'
       // 'check-country-middleware',
@@ -30,7 +30,7 @@ module.exports = {
     ],
     getCasesToday: process.env.NODE_CONTEXT_MIDDLEWARES_GET_CASES || [
       'set-date',
-      'run-big-query',
+      'get-cases-per-date',
       'show-result-raw'
     ],
     getCasesCertainDate: process.env.NODE_CONTEXT_MIDDLEWARES_GET_CASES || [
@@ -38,7 +38,12 @@ module.exports = {
       'validate-month',
       'validate-day',
       'set-date',
-      'run-big-query',
+      'get-cases-per-date',
+      'show-result-raw'
+    ],
+    getCasesPerCountry: process.env.NODE_CONTEXT_MIDDLEWARES_GET_CASES_PER_COUNTRY || [
+      'validate-country',
+      'get-cases-per-country',
       'show-result-raw'
     ]
   }

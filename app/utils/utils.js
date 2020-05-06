@@ -12,8 +12,19 @@ function removeFrontZeros(number){
     return parseInt(number, 10);
 }
 
+function allLetter(str){ 
+    var letters = /^[A-Za-z\.\, áéíúóÁÉÍÓÚÄËÏÖÜäëüïö]+$/;
+    if(str.match(letters)){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
 module.exports = {
     isNormalInteger,
     removeFrontZeros,
+    allLetter,
 
 }
