@@ -19,6 +19,7 @@ module.exports.getBasicStatistics = (req, res, next) => {
   res.data = {};
   res.data = {
     date: formatCertainDate(req.date),
+    infected_countries: info.length,
     confirmed_cases: totalConfirmedCases,
     active_cases: totalActiveCases,
     deaths_cases: totalDeaths,
