@@ -9,6 +9,12 @@ const RESPONSE_OK_CREATED = 'Created successfully';
 const INTERNAL_ERROR = 'Internal Error Not Handled';
 const MONGO_ENTITY_NOT_FOUND = 'Entity not found';
 const INVALID_URL = 'Invalid URL';
+const INVALID_YEAR = 'Invalid Year';
+const YEAR_NOT_FOUND = 'Year not found';
+const INVALID_MONTH = 'Invalid Month';
+const MONTH_NOT_FOUND = 'Month not found';
+const INVALID_DAY = 'Invalid Day';
+const DAY_NOT_FOUND = 'Day not found';
 
 module.exports = {
     RESPONSE_OK_STATUS_MESSAGE,
@@ -21,4 +27,10 @@ module.exports = {
     INTERNAL_ERROR,
     MONGO_ENTITY_NOT_FOUND,
     INVALID_URL,  
+    INVALID_YEAR,
+    YEAR_NOT_FOUND,
+    MONTH_NOT_FOUND,
+    INVALID_MONTH,
+    DAY_NOT_FOUND,
+    INVALID_DAY,
 }

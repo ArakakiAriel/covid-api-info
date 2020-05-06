@@ -1,14 +1,17 @@
 const constants = require('../constants/constants');
 const messages = require('../constants/messages');
 const {getFullDate} = require('../utils/date-util');
+const {removeFrontZeros} = require('../utils/utils')
 
 
 module.exports.setDate = async (req, res, next) => {
     req.date = {};
     if (req.params.year && req.params.month && req.params.day) {
-        req.date.year = req.params.year;
-        req.date.month = req.params.month;
-        req.date.day = req.params.day;
+        let day = removeFrontZeros(req.params.day);
+        let month = removeFrontZeros(req.params.month);
+        let year = removeFrontZeros(req.params.year);
+        
+        req.date = getFullDate(day, month, year);
     }else{
         req.date = getFullDate();    
     }

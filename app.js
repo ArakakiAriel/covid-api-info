@@ -14,7 +14,8 @@ const app = express();
 //const databaseRoute = require('./app/routes/database-route');
 const casesRoute = require('./app/routes/cases-route');
 
-global.globalDate = dateUtil.getFullDate();
+global.todaysDate = dateUtil.getFullDate();
+global.globalDate = todaysDate;
 global.globalCollectionName = `results-${dateUtil.formatCertainDate(globalDate)}`;
 
 // parse application/x-www-form-urlencoded

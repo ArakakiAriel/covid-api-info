@@ -3,16 +3,19 @@
 module.exports = {
   middlewares: {
     getStatistics: process.env.NODE_CONTEXT_MIDDLEWARES_GET_STATISTICS || [
-      'get-basic-statistics'
-      // 'check-country-middleware',
-      // 'validate-doc-type-middleware',
-      // 'validate-doc-number-middleware',
-      // 'get-user-profile-parse-request-middleware',
-      // 'get-user-from-redis-if-header-is-present-middleware',
-      // (req, res) => controller.findOne(req, res)
+      'validate-year',
+      'validate-month',
+      'validate-day',
+      'set-date',
+      'run-big-query',
+      'get-basic-statistics',
+      'show-result-raw'
     ],
     getStatisticsToday: process.env.NODE_CONTEXT_MIDDLEWARES_GET_STATISTICS_TODAY || [
-      'get-basic-statistics'
+      'set-date',
+      'run-big-query',
+      'get-basic-statistics',
+      'show-result-raw'
       // 'check-country-middleware',
       // 'validate-doc-type-middleware',
       // 'validate-doc-number-middleware',
@@ -26,6 +29,14 @@ module.exports = {
       // (req, res) => controller.findOne(req, res)
     ],
     getCasesToday: process.env.NODE_CONTEXT_MIDDLEWARES_GET_CASES || [
+      'set-date',
+      'run-big-query',
+      'show-result-raw'
+    ],
+    getCasesCertainDate: process.env.NODE_CONTEXT_MIDDLEWARES_GET_CASES || [
+      'validate-year',
+      'validate-month',
+      'validate-day',
       'set-date',
       'run-big-query',
       'show-result-raw'
