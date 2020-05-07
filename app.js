@@ -33,7 +33,7 @@ const mongoOptions = {
     useCreateIndex:true,
     useUnifiedTopology: true 
 }
-mongoose.connect(process.env.URLDB, mongoOptions);
+mongoose.connect(config.mongo.urlDB, mongoOptions);
 mongoose.set("useFindAndModify", false);
 mongoose.set("useCreateIndex", true);
 
@@ -47,7 +47,7 @@ mongoose.connection.on('disconnected', () => {
     if (mongoose.connection.readyState === 0) {
       mongoose.connection.readyState = 2;
       setTimeout(() => {
-        mongoose.connect(process.env.URLDB, mongoOptions);
+        mongoose.connect(config.mongo.urlDB, mongoOptions);
       }, config.mongo.reconnection_interval);
     }
 });
