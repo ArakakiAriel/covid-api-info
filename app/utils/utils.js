@@ -50,10 +50,17 @@ function normalizeCountries(listOfCountries){
     return response;
 }
 
+function normalizeCountryName(country){
+    const regex = /[\+%_]/g;
+    let normalized = country.replace(regex," ").toUpperCase()
+    return normalized;
+}
+
 module.exports = {
     isNormalInteger,
     removeFrontZeros,
     allLetter,
-    normalizeCountries
+    normalizeCountries,
+    normalizeCountryName
 
 }

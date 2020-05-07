@@ -38,6 +38,15 @@ function getFullDate(day, month, year) {
     };
 }
 
+function differenceBetweenDates(recentDate, previosDate){
+    let date1 = new Date(recentDate);
+    let date2 = new Date(previosDate);
+    let diffTime = Math.abs(date2 - date1);
+    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    
+    return(diffDays);    
+}
+
 function formatCertainDate(date){
     let year = date.year;
     let month = date.month;
@@ -50,5 +59,6 @@ module.exports = {
     getDay,
     getMonth,
     getFullDate,
-    formatCertainDate
+    formatCertainDate,
+    differenceBetweenDates
 }

@@ -5,10 +5,10 @@ const setResponseWithError = require('../utils/common-response').setResponseWith
 
 
 module.exports.validateCountry = async (req, res, next) => {
-    let country = req.params.country || req.body.country;
+    let country = req.params.country || req.headers['x-flow-country'];
     if (country) {
         if(utils.allLetter(country)){
-            req.country = country.toUpperCase();
+            req.country = utils.normalizeCountryName(country)
             return next();
         }
         
