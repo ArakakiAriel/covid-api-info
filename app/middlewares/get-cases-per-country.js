@@ -16,28 +16,17 @@ module.exports.getCasesPerCountry = async (req, res, next) => {
     if(!countryDataContent){
         const bigqueryClient = new BigQuery();
         // The SQL query to run
-        let sqlQuery = '';
-        if(country.length >= 5){
-            sqlQuery = `SELECT cases.country_region as country, (SUM(cases.latitude)/COUNT(cases.latitude)) as latitude, 
-            (SUM(cases.longitude)/COUNT(cases.longitude)) as longitude, SUM(case when cases.confirmed is null then 0 else cases.confirmed end) as total_confirmed, 
-            SUM(case when cases.deaths is null then 0 else cases.deaths end) as total_deaths, SUM(case when cases.recovered is null then 0 else cases.recovered end) as total_recovered, 
-            SUM(case when cases.active is null then 0 else cases.active end) as total_active_cases, cases.date as updated_date
-            FROM \`bigquery-public-data.covid19_jhu_csse.summary\` cases
-            WHERE  upper(cases.country_region) LIKE  '%${country}%'
-            GROUP BY country, updated_date
-            HAVING total_confirmed > 0
-            ORDER BY country asc, updated_date desc;`;
-        }else{
-            sqlQuery = `SELECT cases.country_region as country, (SUM(cases.latitude)/COUNT(cases.latitude)) as latitude, 
-            (SUM(cases.longitude)/COUNT(cases.longitude)) as longitude, SUM(case when cases.confirmed is null then 0 else cases.confirmed end) as total_confirmed, 
-            SUM(case when cases.deaths is null then 0 else cases.deaths end) as total_deaths, SUM(case when cases.recovered is null then 0 else cases.recovered end) as total_recovered, 
-            SUM(case when cases.active is null then 0 else cases.active end) as total_active_cases, cases.date as updated_date
-            FROM \`bigquery-public-data.covid19_jhu_csse.summary\` cases
-            WHERE  upper(cases.country_region) =  '${country}'
-            GROUP BY country, updated_date
-            HAVING total_confirmed > 0
-            ORDER BY country asc, updated_date desc;`;
-        }
+        let sqlQuery = `SELECT IF(cases.country_region LIKE '%Korea%', 'South Korea', IF(upper(cases.country_region) = 'IRAN (ISLAMIC REPUBLIC OF)', 'Iran',  
+        IF(upper(cases.country_region) = 'REPUBLIC OF IRELAND', 'IRELAND', 
+        IF(cases.country_region = 'United Kingdom', 'UK', IF(upper(cases.country_region) = 'REPUBLIC OF MOLDOVA', 'MOLDOVA', cases.country_region))))) as country, (SUM(cases.latitude)/COUNT(cases.latitude)) as latitude, 
+        (SUM(cases.longitude)/COUNT(cases.longitude)) as longitude, SUM(case when cases.confirmed is null then 0 else cases.confirmed end) as total_confirmed, 
+        SUM(case when cases.deaths is null then 0 else cases.deaths end) as total_deaths, SUM(case when cases.recovered is null then 0 else cases.recovered end) as total_recovered, 
+        SUM(case when cases.active is null then 0 else cases.active end) as total_active_cases, cases.date as updated_date
+        FROM \`bigquery-public-data.covid19_jhu_csse.summary\` cases
+        WHERE  upper(cases.country_region) =  '${country}'
+        GROUP BY country, updated_date
+        HAVING total_confirmed > 0
+        ORDER BY country, updated_date desc;`;
         
     
         const options = {

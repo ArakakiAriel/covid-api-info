@@ -18,7 +18,9 @@ module.exports.getCasesPerDate = async (req, res, next) => {
     if(!covidDataContent){
         const bigqueryClient = new BigQuery();
         // The SQL query to run
-        const sqlQuery = `SELECT cases.country_region as country, (SUM(cases.latitude)/COUNT(cases.latitude)) as latitude, 
+        const sqlQuery = `SELECT IF(cases.country_region LIKE '%Korea%', 'South Korea', IF(upper(cases.country_region) = 'IRAN (ISLAMIC REPUBLIC OF)', 'Iran',  
+        IF(upper(cases.country_region) = 'REPUBLIC OF IRELAND', 'IRELAND', 
+        IF(cases.country_region = 'United Kingdom', 'UK', IF(upper(cases.country_region) = 'REPUBLIC OF MOLDOVA', 'MOLDOVA', cases.country_region))))) as country, (SUM(cases.latitude)/COUNT(cases.latitude)) as latitude, 
         (SUM(cases.longitude)/COUNT(cases.longitude)) as longitude, SUM(case when cases.confirmed is null then 0 else cases.confirmed end) as total_confirmed, 
         SUM(case when cases.deaths is null then 0 else cases.deaths end) as total_deaths, SUM(case when cases.recovered is null then 0 else cases.recovered end) as total_recovered, 
         SUM(case when cases.active is null then 0 else cases.active end) as total_active_cases, MAX(cases.date) as last_update
@@ -30,7 +32,7 @@ module.exports.getCasesPerDate = async (req, res, next) => {
             WHERE c.date <= '${formatedDate}'
             GROUP BY c.country_region
         ) lcases ON cases.country_region = lcases.country_region AND cases.date = lcases.maxdate
-        GROUP BY cases.country_region
+        GROUP BY country
         HAVING total_confirmed > 0
         ORDER BY total_confirmed desc;`;
     
