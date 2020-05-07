@@ -2,6 +2,7 @@ const constants = require('../constants/constants');
 const messages = require('../constants/messages');
 const config = require('../config/config');
 const RedisService = require('../services/redis/redis-service');
+const {normalizeCountries} = require('../utils/utils');
 const {formatCertainDate} = require('../utils/date-util');
 var fs = require('fs');
 const {BigQuery} = require('@google-cloud/bigquery');
@@ -18,9 +19,8 @@ module.exports.getCasesPerDate = async (req, res, next) => {
     if(!covidDataContent){
         const bigqueryClient = new BigQuery();
         // The SQL query to run
-        const sqlQuery = `SELECT IF(cases.country_region LIKE '%Korea%', 'South Korea', IF(upper(cases.country_region) = 'IRAN (ISLAMIC REPUBLIC OF)', 'Iran',  
-        IF(upper(cases.country_region) = 'REPUBLIC OF IRELAND', 'IRELAND', 
-        IF(cases.country_region = 'United Kingdom', 'UK', IF(upper(cases.country_region) = 'REPUBLIC OF MOLDOVA', 'MOLDOVA', cases.country_region))))) as country, (SUM(cases.latitude)/COUNT(cases.latitude)) as latitude, 
+        let normalizedCountries = normalizeCountries(config.bigQuery.countries_to_normalize);
+        const sqlQuery = `SELECT ${normalizedCountries} as country, (SUM(cases.latitude)/COUNT(cases.latitude)) as latitude, 
         (SUM(cases.longitude)/COUNT(cases.longitude)) as longitude, SUM(case when cases.confirmed is null then 0 else cases.confirmed end) as total_confirmed, 
         SUM(case when cases.deaths is null then 0 else cases.deaths end) as total_deaths, SUM(case when cases.recovered is null then 0 else cases.recovered end) as total_recovered, 
         SUM(case when cases.active is null then 0 else cases.active end) as total_active_cases, MAX(cases.date) as last_update

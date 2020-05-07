@@ -30,6 +30,7 @@ if( process.env.NODE_ENV === 'dev'){
 
 process.env.URLDB = urlDB;
 
+
 module.exports = {
     mongo: {
       reconnection_interval: process.env.MONGO_RECONNECTION_INTERVAL || 3000
@@ -48,5 +49,8 @@ module.exports = {
         ttl: process.env.NODE_REDIS_TTL || 86400,
         tls: process.env.REDIS_USE_TLS
     },
+    bigQuery: {
+        countries_to_normalize: process.env.BIGQUERY_COUNTRIES_TO_NORMALIZE || "%KOREA%,SOUTH KOREA;IRAN (ISLAMIC REPUBLIC OF),IRAN;REPUBLIC OF IRELAND,IRELAND;UNITED KINGDOM,UK;REPUBLIC OF MOLDOVA,MOLDOVA;CONGO (KINSHASA),CONGO KINSHASA;CONGO (BRAZZAVILLE),CONGO BRAZZAVILLE"
+    }
 };
   
