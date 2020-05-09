@@ -2,7 +2,7 @@ const constants = require('../constants/constants');
 const messages = require('../constants/messages');
 const config = require('../config/config');
 const RedisService = require('../services/redis/redis-service');
-const {normalizeCountries} = require('../utils/utils');
+const {normalizeCountriesbkp} = require('../utils/utils');
 const {BigQuery} = require('@google-cloud/bigquery');
 const setResponseWithError = require('../utils/common-response').setResponseWithError;
 
@@ -18,18 +18,18 @@ module.exports.getCasesPerCountry = async (req, res, next) => {
         try {
             const bigqueryClient = new BigQuery();
             // The SQL query to run
-            let normalizedCountries = normalizeCountries(config.bigQuery.countries_to_normalize);
-            let sqlQuery = `SELECT ${normalizedCountries} as country, (SUM(cases.latitude)/COUNT(cases.latitude)) as latitude, 
-            (SUM(cases.longitude)/COUNT(cases.longitude)) as longitude, SUM(case when cases.confirmed is null then 0 else cases.confirmed end) as total_confirmed, 
-            SUM(case when cases.deaths is null then 0 else cases.deaths end) as total_deaths, SUM(case when cases.recovered is null then 0 else cases.recovered end) as total_recovered, 
-            SUM(case when cases.active is null then 0 else cases.active end) as total_active_cases, cases.date as updated_date
+            let normalizedCountries = normalizeCountriesbkp(config.bigQuery.countries_to_normalize, 'cases');
+            let sqlQuery = `SELECT ${normalizedCountries} AS country, (SUM(cases.latitude)/COUNT(cases.latitude)) as latitude, 
+            (SUM(cases.longitude)/COUNT(cases.longitude)) as longitude, SUM(COALESCE(cases.confirmed, 0)) as total_confirmed, 
+            SUM(COALESCE(cases.deaths, 0)) as total_deaths, SUM(COALESCE(cases.recovered, 0)) as total_recovered, 
+            SUM(COALESCE(cases.active, 0)) as total_active_cases, cases.date as updated_date
             FROM \`bigquery-public-data.covid19_jhu_csse.summary\` cases
             WHERE  upper(${normalizedCountries}) =  '${country}'
             GROUP BY country, updated_date
             HAVING total_confirmed > 0
             ORDER BY country, updated_date desc;`;
             
-        
+            console.log(sqlQuery);
             const options = {
             query: sqlQuery,
             // Location must match that of the dataset(s) referenced in the query.
@@ -43,17 +43,18 @@ module.exports.getCasesPerCountry = async (req, res, next) => {
                 return setResponseWithError(res, constants.NOT_FOUND_ERROR, `No data where found for ${country}`);
             }
 
-        
             for(let i = 0; i < globalCases.length; i++){
                 globalCases[i].country = globalCases[i].country.toUpperCase();
+                let activeCases = (globalCases[i].total_active_cases == 0 ? globalCases[i].total_confirmed - globalCases[i].total_deaths - globalCases[i].total_recovered : globalCases[i].total_active_cases);
+
                 globalCases[i].total = {
                     confirmed : globalCases[i].total_confirmed,
-                    actives: globalCases[i].total_active_cases,
+                    actives: activeCases,
                     deaths: globalCases[i].total_deaths,
                     recovered: globalCases[i].total_recovered
                 }
                 globalCases[i].percentage ={
-                    actives : `${(globalCases[i].total_active_cases / globalCases[i].total_confirmed * 100).toFixed(2)}%`,
+                    actives : `${(activeCases / globalCases[i].total_confirmed * 100).toFixed(2)}%`,
                     deaths : `${(globalCases[i].total_deaths / globalCases[i].total_confirmed * 100).toFixed(2)}%`,
                     recovered : `${(globalCases[i].total_recovered / globalCases[i].total_confirmed * 100).toFixed(2)}%`
                 };

@@ -10,14 +10,20 @@ module.exports.getBasicStatistics = (req, res, next) => {
   let totalClosedCases = 0;
 
   for(let i = 0; i < info.length; i++){
-    totalConfirmedCases += info[i].total_confirmed;
-    totalActiveCases += info[i].total_active_cases;
-    totalRecovered += info[i].total_recovered;
-    totalDeaths += info[i].total_deaths;
+    totalConfirmedCases += info[i].total.confirmed;
+    totalActiveCases += info[i].total.actives;
+    totalRecovered += info[i].total.recovered;
+    totalDeaths += info[i].total.deaths;
   }
   totalClosedCases = totalRecovered + totalDeaths;
   res.data = {};
   res.data = {
+    // total:{
+    //   confirmed:
+    //   actives:
+    //   deaths:
+    //   recovered:
+    // }
     date: formatCertainDate(req.date),
     infected_countries: info.length,
     confirmed_cases: totalConfirmedCases,

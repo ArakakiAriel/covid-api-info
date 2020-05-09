@@ -18,6 +18,8 @@ const DAY_NOT_FOUND = 'Day not found';
 const NOT_RESULT_FOUND = 'Not results where found with the data given';
 const INVALID_COUNTRY = 'Invalid Country';
 const COUNTRY_NOT_FOUND = 'Please put a country to search the data';
+const REQUEST_TIMEOUT = 'Request timeout';
+const NOT_HANDLED_ERROR = 'Internal error not handled';
 
 module.exports = {
     RESPONSE_OK_STATUS_MESSAGE,
@@ -38,5 +40,7 @@ module.exports = {
     INVALID_DAY,
     NOT_RESULT_FOUND,
     INVALID_COUNTRY,
-    COUNTRY_NOT_FOUND
+    COUNTRY_NOT_FOUND,
+    REQUEST_TIMEOUT,
+    NOT_HANDLED_ERROR
 }

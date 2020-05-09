@@ -14,10 +14,10 @@ module.exports.getCountryCasesGrowth = (req, res, next) => {
       country: recentDate.country,
       date: recentDate.updated_date,
       previous_date: previousDate.updated_date,
-      new_confirmed_cases: recentDate.total_confirmed - previousDate.total_confirmed,
-      new_active_cases: recentDate.total_active_cases - previousDate.total_active_cases,
-      new_recovered_cases: recentDate.total_recovered - previousDate.total_recovered,
-      new_death_cases: recentDate.total_deaths - previousDate.total_deaths,
+      new_confirmed_cases: recentDate.total.confirmed - previousDate.total.confirmed,
+      new_active_cases: recentDate.total.actives - previousDate.total.actives,
+      new_recovered_cases: recentDate.total.recovered - previousDate.total.recovered,
+      new_death_cases: recentDate.total.deaths - previousDate.total.deaths,
       days_since_previous_update: differenceBetweenDates(recentDate.updated_date, previousDate.updated_date)
     };
 

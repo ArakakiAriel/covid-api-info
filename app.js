@@ -66,6 +66,22 @@ app.use('*', (req, res) => { // eslint-disable-line
   res.status(constants.NOT_FOUND_ERROR).send({ code: constants.NOT_FOUND_ERROR, message: messages.INVALID_URL });
 });
 
+//TIMEOUT
+app.use((err, req, res, next) => { // eslint-disable-line
+  // eslint-disable-next-line max-len
+  if (req.timedout) {
+    res.status(constants.REQUEST_TIMEOUT).send({
+      code: messages.RESPONSE_NOK_STATUS_MESSAGE,
+      message: messages.REQUEST_TIMEOUT
+    });
+  } else {
+    res.status(constants.INTERNAL_ERROR).send({
+      code: constants.INTERNAL_ERROR,
+      message: messages.NOT_HANDLED_ERROR
+    });
+  }
+});
+
 app.listen(process.env.PORT, () => {
     console.log("Listening on port ", process.env.PORT);
 });

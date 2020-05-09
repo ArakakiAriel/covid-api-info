@@ -27,7 +27,7 @@ function normalizeCountries(listOfCountries){
     let aux = listOfCountries.split(";");
     let response = ``;
     aux.forEach(element =>{
-        countriesToNormalize.push(element.split(","));
+        countriesToNormalize.push(element.split("-"));
     });
     let size = countriesToNormalize.length;
 
@@ -50,6 +50,29 @@ function normalizeCountries(listOfCountries){
     return response;
 }
 
+function normalizeCountriesbkp(listOfCountries, fileName){
+    let countriesToNormalize = [];
+    let aux = listOfCountries.split(";");
+    let response = `CASE `;
+    aux.forEach(element =>{
+        countriesToNormalize.push(element.split("-"));
+    });
+    let size = countriesToNormalize.length;
+
+    for(let i = 0; i < size; i++){
+        if(countriesToNormalize[i][0].includes("%")){
+            response += `WHEN upper(${fileName}.country_region) LIKE '${countriesToNormalize[i][0]}' THEN '${countriesToNormalize[i][1]}'`;
+        }else{
+            response += `WHEN upper(${fileName}.country_region) = '${countriesToNormalize[i][0]}' THEN '${countriesToNormalize[i][1]}'`
+        }
+    }
+    
+    response += `ELSE ${fileName}.country_region END`
+
+    return response;
+}
+
+
 function normalizeCountryName(country){
     const regex = /[\+%_]/g;
     let normalized = country.replace(regex," ").toUpperCase()
@@ -61,6 +84,6 @@ module.exports = {
     removeFrontZeros,
     allLetter,
     normalizeCountries,
-    normalizeCountryName
-
+    normalizeCountryName,
+    normalizeCountriesbkp
 }
