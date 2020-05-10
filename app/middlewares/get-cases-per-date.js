@@ -51,6 +51,17 @@ module.exports.getCasesPerDate = async (req, res, next) => {
                 return setResponseWithError(res, constants.NOT_FOUND_ERROR, messages.NOT_RESULT_FOUND);
             }
 
+            let globalConfirmedCases = 0;
+            let globalActiveCases = 0;
+            let globalRecovered = 0;
+            let globalDeaths = 0;
+            for(let i = 0; i < globalCases.length; i++){
+                globalConfirmedCases += globalCases[i].total_confirmed;
+                globalActiveCases += globalCases[i].total_active_cases;
+                globalRecovered += globalCases[i].total_recovered;
+                globalDeaths += globalCases[i].total_deaths;
+            }
+
             //Data normalizer
             for(let i = 0; i < globalCases.length; i++){
                 globalCases[i].country = globalCases[i].country.toUpperCase();
@@ -66,7 +77,15 @@ module.exports.getCasesPerDate = async (req, res, next) => {
                 globalCases[i].percentage ={
                     actives : `${(activeCases / globalCases[i].total_confirmed * 100).toFixed(2)}%`,
                     deaths : `${(globalCases[i].total_deaths / globalCases[i].total_confirmed * 100).toFixed(2)}%`,
-                    recovered : `${(globalCases[i].total_recovered / globalCases[i].total_confirmed * 100).toFixed(2)}%`
+                    recovered : `${(globalCases[i].total_recovered / globalCases[i].total_confirmed * 100).toFixed(2)}%`,
+                    mortality_rate: `${(globalCases[i].total_deaths / (globalCases[i].total_deaths + globalCases[i].total_recovered) * 100).toFixed(2)}%`,
+                };
+                globalCases[i].global_percentage ={
+                    confirmed : `${(globalCases[i].total_confirmed / globalConfirmedCases * 100).toFixed(2)}%`,
+                    actives : `${(activeCases / globalConfirmedCases * 100).toFixed(2)}%`,
+                    deaths : `${(globalCases[i].total_deaths / globalConfirmedCases * 100).toFixed(2)}%`,
+                    recovered : `${(globalCases[i].total_recovered / globalConfirmedCases * 100).toFixed(2)}%`,
+                    
                 };
                 delete globalCases[i].total_confirmed ;
                 delete globalCases[i].total_active_cases;

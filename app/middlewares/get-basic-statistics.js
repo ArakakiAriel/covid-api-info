@@ -18,19 +18,22 @@ module.exports.getBasicStatistics = (req, res, next) => {
   totalClosedCases = totalRecovered + totalDeaths;
   res.data = {};
   res.data = {
-    // total:{
-    //   confirmed:
-    //   actives:
-    //   deaths:
-    //   recovered:
-    // }
-    date: formatCertainDate(req.date),
     infected_countries: info.length,
-    confirmed_cases: totalConfirmedCases,
-    active_cases: totalActiveCases,
-    deaths_cases: totalDeaths,
-    recovered_cases: totalRecovered,
-    closed_cases: totalClosedCases
+    total:{
+      confirmed: totalConfirmedCases,
+      actives: totalActiveCases,
+      deaths: totalDeaths,
+      recovered: totalRecovered,
+      closed_cases: totalClosedCases
+    },
+    percentage: {
+      actives : `${(totalActiveCases / totalConfirmedCases * 100).toFixed(2)}%`,
+      deaths : `${(totalDeaths / totalConfirmedCases * 100).toFixed(2)}%`,
+      recovered : `${(totalRecovered / totalConfirmedCases * 100).toFixed(2)}%`,
+      closed_cases : `${(totalClosedCases / totalConfirmedCases * 100).toFixed(2)}%`,
+      mortality_rate: `${(totalDeaths / (totalDeaths + totalRecovered) * 100).toFixed(2)}%`,
+    },
+    date: formatCertainDate(req.date),
   }
   return next();
   };

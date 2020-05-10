@@ -29,7 +29,6 @@ module.exports.getCasesPerCountry = async (req, res, next) => {
             HAVING total_confirmed > 0
             ORDER BY country, updated_date desc;`;
             
-            console.log(sqlQuery);
             const options = {
             query: sqlQuery,
             // Location must match that of the dataset(s) referenced in the query.
