@@ -2,7 +2,7 @@ const constants = require('../constants/constants');
 const messages = require('../constants/messages');
 const config = require('../config/config');
 const RedisService = require('../services/redis/redis-service');
-const {normalizeCountriesbkp} = require('../utils/utils');
+const {normalizeCountries} = require('../utils/utils');
 const {formatCertainDate} = require('../utils/date-util');
 var fs = require('fs');
 const {BigQuery} = require('@google-cloud/bigquery');
@@ -20,24 +20,38 @@ module.exports.getCasesPerDate = async (req, res, next) => {
         try {
             const bigqueryClient = new BigQuery();
             // The SQL query to run
-            let normalizedCountriesCases = normalizeCountriesbkp(config.bigQuery.countries_to_normalize, "cases");
-            let normalizedCountriesC = normalizeCountriesbkp(config.bigQuery.countries_to_normalize, "c");
-            const sqlQuery = `SELECT ${normalizedCountriesCases} as country, (SUM(cases.latitude)/COUNT(cases.latitude)) as latitude, 
-            (SUM(cases.longitude)/COUNT(cases.longitude)) as longitude,SUM(COALESCE(cases.confirmed, 0)) as total_confirmed, 
+            let normalizedCountriesCases = normalizeCountries(config.bigQuery.countries_to_normalize, "cases");
+            const sqlQuery = `SELECT ${normalizedCountriesCases} as country, (SUM(cases.latitude * cases.confirmed)/SUM(cases.confirmed)) as latitude, 
+            (SUM(cases.longitude * cases.confirmed)/SUM(cases.confirmed)) as longitude,SUM(COALESCE(cases.confirmed, 0)) as total_confirmed, 
             SUM(COALESCE(cases.deaths, 0)) as total_deaths, SUM(COALESCE(cases.recovered, 0)) as total_recovered, 
             SUM(COALESCE(cases.active, 0)) as total_active_cases, MAX(cases.date) as updated_date
             FROM
             \`bigquery-public-data.covid19_jhu_csse.summary\` cases
             INNER JOIN (
-                SELECT ${normalizedCountriesC} as countryc, MAX(c.date) as maxdate
+                SELECT country_region, MAX(c.date) as maxdate
                 FROM	\`bigquery-public-data.covid19_jhu_csse.summary\` c
                 WHERE c.date <= '${formatedDate}'
-                GROUP BY countryc
-            ) lcases ON cases.country_region = lcases.countryc AND cases.date = lcases.maxdate
+                GROUP BY c.country_region
+            ) lcases ON cases.country_region = lcases.country_region AND cases.date = lcases.maxdate
             GROUP BY country
             HAVING total_confirmed > 0
             ORDER BY total_confirmed desc;`;
-        
+            console.log(sqlQuery);
+            // const sqlQuery = `SELECT ${normalizedCountriesCases} as country, (SUM(cases.latitude)/COUNT(cases.latitude)) as latitude, 
+            // (SUM(cases.longitude)/COUNT(cases.longitude)) as longitude,SUM(COALESCE(cases.confirmed, 0)) as total_confirmed, 
+            // SUM(COALESCE(cases.deaths, 0)) as total_deaths, SUM(COALESCE(cases.recovered, 0)) as total_recovered, 
+            // SUM(COALESCE(cases.active, 0)) as total_active_cases, MAX(cases.date) as updated_date
+            // FROM
+            // \`bigquery-public-data.covid19_jhu_csse.summary\` cases
+            // INNER JOIN (
+            //     SELECT ${normalizedCountriesC} as countryc, MAX(c.date) as maxdate
+            //     FROM	\`bigquery-public-data.covid19_jhu_csse.summary\` c
+            //     WHERE c.date <= '${formatedDate}'
+            //     GROUP BY countryc
+            // ) lcases ON cases.country_region = lcases.countryc AND cases.date = lcases.maxdate
+            // GROUP BY country
+            // HAVING total_confirmed > 0
+            // ORDER BY total_confirmed desc;`;
             const options = {
             query: sqlQuery,
             // Location must match that of the dataset(s) referenced in the query.
@@ -92,7 +106,7 @@ module.exports.getCasesPerDate = async (req, res, next) => {
                 delete globalCases[i].total_deaths;
                 delete globalCases[i].total_recovered;
                 
-                globalCases[i].location = {
+                globalCases[i].coordinates = {
                     latitude: globalCases[i].latitude,
                     longitude: globalCases[i].longitude
                 }

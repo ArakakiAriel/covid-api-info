@@ -2,7 +2,7 @@ const constants = require('../constants/constants');
 const messages = require('../constants/messages');
 const config = require('../config/config');
 const RedisService = require('../services/redis/redis-service');
-const {normalizeCountriesbkp} = require('../utils/utils');
+const {normalizeCountries} = require('../utils/utils');
 const {BigQuery} = require('@google-cloud/bigquery');
 const setResponseWithError = require('../utils/common-response').setResponseWithError;
 
@@ -18,7 +18,7 @@ module.exports.getCasesPerCountry = async (req, res, next) => {
         try {
             const bigqueryClient = new BigQuery();
             // The SQL query to run
-            let normalizedCountries = normalizeCountriesbkp(config.bigQuery.countries_to_normalize, 'cases');
+            let normalizedCountries = normalizeCountries(config.bigQuery.countries_to_normalize, 'cases');
             let sqlQuery = `SELECT ${normalizedCountries} AS country, (SUM(cases.latitude)/COUNT(cases.latitude)) as latitude, 
             (SUM(cases.longitude)/COUNT(cases.longitude)) as longitude, SUM(COALESCE(cases.confirmed, 0)) as total_confirmed, 
             SUM(COALESCE(cases.deaths, 0)) as total_deaths, SUM(COALESCE(cases.recovered, 0)) as total_recovered, 
@@ -62,7 +62,7 @@ module.exports.getCasesPerCountry = async (req, res, next) => {
                 delete globalCases[i].total_deaths;
                 delete globalCases[i].total_recovered;
 
-                globalCases[i].location = {
+                globalCases[i].coordinates = {
                     latitude: globalCases[i].latitude,
                     longitude: globalCases[i].longitude
                 }
