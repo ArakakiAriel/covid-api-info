@@ -25,6 +25,20 @@ module.exports.getCountryCasesGrowth = (req, res, next) => {
   
       data.push(statistics);
     }
+    if(infoSize == 1){
+
+      data = [{
+        "country": info[0].country,
+        "date": info[0].updated_date,
+        "previous_date": info[0].updated_date,
+        "new_confirmed_cases": 0,
+        "new_active_cases": 0,
+        "new_recovered_cases": 0,
+        "new_death_cases": 0,
+        "growth_factor": "NaN",
+        "days_since_previous_update": 0
+      }];
+    }
   } catch (error) {
     console.log(error);
   }
