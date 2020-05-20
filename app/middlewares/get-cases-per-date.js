@@ -110,6 +110,13 @@ module.exports.getCasesPerDate = async (req, res, next) => {
                     latitude: globalCases[i].latitude,
                     longitude: globalCases[i].longitude
                 }
+
+                // if(globalCases[i].country == "DIAMOND PRINCESS"){
+                //     globalCases[i].coordinates = {
+                //         latitude: "35.41458",
+                //         longitude: "139.68203"
+                //     }
+                // }
                 delete globalCases[i].latitude;
                 delete globalCases[i].longitude;
 

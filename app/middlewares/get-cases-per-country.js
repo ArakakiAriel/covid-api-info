@@ -34,7 +34,8 @@ module.exports.getCasesPerCountry = async (req, res, next) => {
             // Location must match that of the dataset(s) referenced in the query.
             location: 'US',
             };
-        
+            
+            console.log(sqlQuery);
             // Run the query
             const [globalCases] = await bigqueryClient.query(options);
 

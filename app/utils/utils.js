@@ -27,7 +27,7 @@ function normalizeCountries(listOfCountries, fileName){
     let aux = listOfCountries.split(";");
     let response = `CASE `;
     aux.forEach(element =>{
-        countriesToNormalize.push(element.split("-"));
+        countriesToNormalize.push(element.split("&"));
     });
     let size = countriesToNormalize.length;
 
