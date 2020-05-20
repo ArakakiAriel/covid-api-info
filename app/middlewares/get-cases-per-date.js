@@ -43,6 +43,7 @@ module.exports.getCasesPerDate = async (req, res, next) => {
             };
         
             // Run the query
+            console.log(sqlQuery);
             const [globalCases] = await bigqueryClient.query(options);
             
             if(!globalCases){
@@ -54,6 +55,9 @@ module.exports.getCasesPerDate = async (req, res, next) => {
             let globalRecovered = 0;
             let globalDeaths = 0;
             for(let i = 0; i < globalCases.length; i++){
+                if(globalCases[i].country == "ARGENTINA"){
+                    console.log("confirmed", globalCases[i].total_confirmed);
+                }
                 globalConfirmedCases += globalCases[i].total_confirmed;
                 globalActiveCases += globalCases[i].total_active_cases;
                 globalRecovered += globalCases[i].total_recovered;

@@ -8,6 +8,7 @@ module.exports.getBasicStatistics = (req, res, next) => {
   let totalRecovered = 0;
   let totalDeaths = 0;
   let totalClosedCases = 0;
+  let updatedDate = info[0].updated_date;
 
   for(let i = 0; i < info.length; i++){
     totalConfirmedCases += info[i].total.confirmed;
@@ -33,7 +34,7 @@ module.exports.getBasicStatistics = (req, res, next) => {
       closed_cases : `${(totalClosedCases / totalConfirmedCases * 100).toFixed(2)}%`,
       mortality_rate: `${(totalDeaths / (totalDeaths + totalRecovered) * 100).toFixed(2)}%`,
     },
-    date: formatCertainDate(req.date),
+    date: updatedDate,
   }
   return next();
   };
