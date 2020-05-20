@@ -36,22 +36,6 @@ module.exports.getCasesPerDate = async (req, res, next) => {
             GROUP BY country
             HAVING total_confirmed > 0
             ORDER BY total_confirmed desc;`;
-            console.log(sqlQuery);
-            // const sqlQuery = `SELECT ${normalizedCountriesCases} as country, (SUM(cases.latitude)/COUNT(cases.latitude)) as latitude, 
-            // (SUM(cases.longitude)/COUNT(cases.longitude)) as longitude,SUM(COALESCE(cases.confirmed, 0)) as total_confirmed, 
-            // SUM(COALESCE(cases.deaths, 0)) as total_deaths, SUM(COALESCE(cases.recovered, 0)) as total_recovered, 
-            // SUM(COALESCE(cases.active, 0)) as total_active_cases, MAX(cases.date) as updated_date
-            // FROM
-            // \`bigquery-public-data.covid19_jhu_csse.summary\` cases
-            // INNER JOIN (
-            //     SELECT ${normalizedCountriesC} as countryc, MAX(c.date) as maxdate
-            //     FROM	\`bigquery-public-data.covid19_jhu_csse.summary\` c
-            //     WHERE c.date <= '${formatedDate}'
-            //     GROUP BY countryc
-            // ) lcases ON cases.country_region = lcases.countryc AND cases.date = lcases.maxdate
-            // GROUP BY country
-            // HAVING total_confirmed > 0
-            // ORDER BY total_confirmed desc;`;
             const options = {
             query: sqlQuery,
             // Location must match that of the dataset(s) referenced in the query.

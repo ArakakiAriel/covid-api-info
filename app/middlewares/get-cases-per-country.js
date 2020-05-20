@@ -35,7 +35,6 @@ module.exports.getCasesPerCountry = async (req, res, next) => {
             location: 'US',
             };
             
-            console.log(sqlQuery);
             // Run the query
             const [globalCases] = await bigqueryClient.query(options);
 
@@ -85,6 +84,34 @@ module.exports.getCasesPerCountry = async (req, res, next) => {
             return setResponseWithError(res, constants.INTERNAL_ERROR, messages.INTERNAL_ERROR);
         }
     }
+
+    //Use country-search-counter key to find how many times each country was searched for
+    let countryCounterRedisData = await redis.getData('country-search-counter');
+    let countryCounter = [];
+    if(countryCounterRedisData){
+        let found = false;
+        countryCounter = JSON.parse(countryCounterRedisData);
+        for(let i = 0; i < countryCounter.length; i++){
+            if(countryCounter[i].name == country){
+                countryCounter[i].views += 1;
+                found = true;
+                break;
+            }
+        }
+        if(!found){
+                countryCounter.push({
+                    name: country,
+                    views: 1
+                });
+        }
+    }else{
+        countryCounter.push({
+            name: country,
+            views: 1
+        });
+    }
+
+    await redis.setData('country-search-counter', JSON.stringify(countryCounter));
     res.data = JSON.parse(countryDataContent);
 
     return next();
