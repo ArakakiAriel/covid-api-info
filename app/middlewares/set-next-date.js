@@ -9,7 +9,6 @@ module.exports.setNextDate = (req, res, next) => {
     req.arrayOfStatistics.push(res.data);
 
     let newDate = subtractDay(1,res.data.date);
-    console.log("next date", newDate);
     req.params = {};
     req.params.year = newDate.year;
     req.params.month = newDate.month;

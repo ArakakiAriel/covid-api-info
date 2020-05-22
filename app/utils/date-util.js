@@ -29,7 +29,7 @@ function getFullDate(day, month, year) {
         year = (year) ? year.toString() : d.getFullYear().toString();
         month = (month) ? getMonth(month) : getMonth();
         day = (day) ? getDay(day) : getDay();
-    
+        
 
     return {
         year,
