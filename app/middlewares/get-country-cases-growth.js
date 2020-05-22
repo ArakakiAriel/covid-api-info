@@ -11,7 +11,7 @@ module.exports.getCountryCasesGrowth = (req, res, next) => {
       let previousDate = info[i+1];
       let newConfirmedCases = recentDate.total.confirmed - previousDate.total.confirmed;
       let growthFactor = 0;
-      if(previousDate.total.actives != 0){
+      if(newConfirmedCases != 0){
         growthFactor = (Math.log(newConfirmedCases) / Math.log(previousDate.total.actives)).toFixed(2);
       }
       let statistics = {
