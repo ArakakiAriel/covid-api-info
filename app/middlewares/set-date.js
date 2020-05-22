@@ -7,7 +7,6 @@ const {removeFrontZeros} = require('../utils/utils')
 module.exports.setDate = async (req, res, next) => {
     req.date = {};
     if (req.params.year && req.params.month && req.params.day) {
-        console.log("tengo fullDate");
         let day = removeFrontZeros(req.params.day);
         let month = removeFrontZeros(req.params.month);
         let year = removeFrontZeros(req.params.year);
@@ -16,7 +15,6 @@ module.exports.setDate = async (req, res, next) => {
 
         console.log(req.date);
     }else{
-        console.log("no tengo fullDate");
         req.date = getFullDate();    
     }
 

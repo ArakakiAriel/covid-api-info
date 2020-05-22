@@ -55,10 +55,23 @@ function formatCertainDate(date){
     return year+"-"+month+"-"+day;
 }
 
+
+function subtractDay(amount, lastDate){
+
+    let d = new Date(lastDate);
+    d.setDate(d.getDate() - amount )
+
+    let date = getFullDate(d.getDate(), d.getMonth()+1, d.getFullYear());
+    
+    return date;
+}
+
+
 module.exports = {
     getDay,
     getMonth,
     getFullDate,
     formatCertainDate,
-    differenceBetweenDates
+    differenceBetweenDates,
+    subtractDay
 }

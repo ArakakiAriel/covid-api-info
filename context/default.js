@@ -1,4 +1,4 @@
-//const controller = require('../app/controllers/country-controller');
+const config = require('../app/config/config');
 
 module.exports = {
   middlewares: {
@@ -46,6 +46,19 @@ module.exports = {
       'validate-country',
       'get-cases-per-country',
       'get-country-cases-growth',
+      'show-result-raw'
+    ],
+    getLatestGlobalCases: process.env.NODE_CONTEXT_MIDDLEWARES_GET_LATEST_GLOBAL_CASES || [
+      'validate-array-of-statistics',
+      { repeat: config.globalStatistics.repeat,
+        array: [
+          'set-date',
+          'get-cases-per-date',
+          'get-basic-statistics',
+          'set-next-date'
+        ]
+      },
+      'save-array-of-statistics-on-redis',
       'show-result-raw'
     ]
   }
