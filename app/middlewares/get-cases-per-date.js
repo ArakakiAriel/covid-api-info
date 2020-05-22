@@ -101,6 +101,12 @@ module.exports.getCasesPerDate = async (req, res, next) => {
                         longitude: "139.68203"
                     }
                 }
+                if(globalCases[i].country == "BELIZE"){
+                    globalCases[i].coordinates = {
+                        latitude: "17.1907805",
+                        longitude: "-88.3596575"
+                    }
+                }
                 delete globalCases[i].latitude;
                 delete globalCases[i].longitude;
 
