@@ -20,19 +20,22 @@ module.exports.getCasesPerDate = async (req, res, next) => {
         try {
             const bigqueryClient = new BigQuery();
             // The SQL query to run
-            let normalizedCountriesCases = normalizeCountries(config.bigQuery.countries_to_normalize, "cases");
-            const sqlQuery = `SELECT ${normalizedCountriesCases} as country, (SUM(cases.latitude * cases.confirmed)/SUM(cases.confirmed)) as latitude, 
+            let normalizedCountriesCases = normalizeCountries(config.bigQuery.countries_to_normalize, "aux");
+            let normalizedCountriesCases2 = normalizeCountries(config.bigQuery.countries_to_normalize, "c");
+            const sqlQuery = `SELECT cases.country_region as country, (SUM(cases.latitude * cases.confirmed)/SUM(cases.confirmed)) as latitude, 
             (SUM(cases.longitude * cases.confirmed)/SUM(cases.confirmed)) as longitude,SUM(COALESCE(cases.confirmed, 0)) as total_confirmed, 
             SUM(COALESCE(cases.deaths, 0)) as total_deaths, SUM(COALESCE(cases.recovered, 0)) as total_recovered, 
             SUM(COALESCE(cases.active, 0)) as total_active_cases, MAX(cases.date) as updated_date
             FROM
-            \`bigquery-public-data.covid19_jhu_csse.summary\` cases
+                (SELECT ${normalizedCountriesCases} as country_region, aux.latitude, aux.longitude,aux.confirmed,aux.deaths,aux.recovered,
+                aux.active,aux.date
+                FROM \`bigquery-public-data.covid19_jhu_csse.summary\` aux) cases
             INNER JOIN (
-                SELECT country_region, MAX(c.date) as maxdate
+                SELECT ${normalizedCountriesCases2} as country, MAX(c.date) as maxdate
                 FROM	\`bigquery-public-data.covid19_jhu_csse.summary\` c
                 WHERE c.date <= '${formatedDate}'
-                GROUP BY c.country_region
-            ) lcases ON cases.country_region = lcases.country_region AND cases.date = lcases.maxdate
+                GROUP BY country
+            ) lcases ON upper(cases.country_region)  = upper(lcases.country) AND cases.date = lcases.maxdate
             GROUP BY country
             HAVING total_confirmed > 0
             ORDER BY total_confirmed desc;`;
@@ -42,6 +45,7 @@ module.exports.getCasesPerDate = async (req, res, next) => {
             location: 'US',
             };
         
+            console.log(sqlQuery);
             // Run the query
             const [globalCases] = await bigqueryClient.query(options);
             
