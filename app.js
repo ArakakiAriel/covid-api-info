@@ -37,7 +37,7 @@ const mongoOptions = {
     useCreateIndex:true,
     useUnifiedTopology: true 
 }
-mongoose.connect(config.mongo.urlDB, mongoOptions);
+/*mongoose.connect(config.mongo.urlDB, mongoOptions);
 mongoose.set("useFindAndModify", false);
 mongoose.set("useCreateIndex", true);
 
@@ -54,7 +54,7 @@ mongoose.connection.on('disconnected', () => {
         mongoose.connect(config.mongo.urlDB, mongoOptions);
       }, config.mongo.reconnection_interval);
     }
-});
+});*/
 
 
 // covid routing
