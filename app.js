@@ -37,30 +37,37 @@ const mongoOptions = {
     useCreateIndex:true,
     useUnifiedTopology: true 
 }
-/*mongoose.connect(config.mongo.urlDB, mongoOptions);
-mongoose.set("useFindAndModify", false);
-mongoose.set("useCreateIndex", true);
-
-
-mongoose.connection.on('connected', () => {
-    console.log('MONGO CONNNECTED'.green);
-  });
+if(config.mongo.needConnection){
+  mongoose.connect(config.mongo.urlDB, mongoOptions);
+  mongoose.set("useFindAndModify", false);
+  mongoose.set("useCreateIndex", true);
   
-mongoose.connection.on('disconnected', () => {
-    console.log('MONGO DISCONNECTED'.red);
-    if (mongoose.connection.readyState === 0) {
-      mongoose.connection.readyState = 2;
-      setTimeout(() => {
-        mongoose.connect(config.mongo.urlDB, mongoOptions);
-      }, config.mongo.reconnection_interval);
-    }
-});*/
+  
+  mongoose.connection.on('connected', () => {
+      console.log('MONGO CONNNECTED'.green);
+    });
+    
+  mongoose.connection.on('disconnected', () => {
+      console.log('MONGO DISCONNECTED'.red);
+      if (mongoose.connection.readyState === 0) {
+        mongoose.connection.readyState = 2;
+        setTimeout(() => {
+          mongoose.connect(config.mongo.urlDB, mongoOptions);
+        }, config.mongo.reconnection_interval);
+      }
+  });
+}
 
 
 // covid routing
 //app.use(`/api/covid/database`, databaseRoute);
 app.use(`/api/covid/cases/country`, countryCasesRoute);
 app.use(`/api/covid/cases`, casesRoute);
+app.get('/healthcheck', (req, res) => {
+  res.json({ //Mando la respuesta como json
+    running: true
+  })
+});
 
 
 // 404 - Json formatting for not supported URI

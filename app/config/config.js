@@ -20,7 +20,8 @@ process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.GOOGLE_APPLICATION_CRED
 module.exports = {
     mongo: {
         urlDB: process.env.MONGO_URL_DB || 'mongodb://localhost:27018/covid',
-        reconnection_interval: process.env.MONGO_RECONNECTION_INTERVAL || 3000
+        reconnection_interval: process.env.MONGO_RECONNECTION_INTERVAL || 3000,
+        needConnection: process.env.MONGO_NEED_CONNECTION || false
     },
     timeouts: {
         timer_default: process.env.TIMEOUT_TIMER_DEFAULT || 3000,
