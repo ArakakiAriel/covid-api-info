@@ -1,0 +1,140 @@
+swagger: '2.0'
+info:
+  version: '1.0'
+  title: covid-map-tracker
+host: covid-map-tracker.herokuapp.com
+basePath: /api/covid
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /cases/basic_statistics/{year}/{month}/{day}:
+    get:
+      summary: Get basic-statistics of certain date
+      description: Returns the basic statistics of a certain date
+      operationId: get-statistics
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+      - name: "year"
+        in: "path"
+        description: "Year of searched date. \n "
+        required: true
+        type: number
+      - name: "month"
+        in: "path"
+        description: "Month of searched date. "
+        required: true
+        type: number
+      - name: "day"
+        in: "path"
+        description: "Day of searched date. "
+        required: true
+        type: number
+      responses:
+        '200':
+          description: 'OK'
+          schema:
+            $ref: "#/definitions/Response_get_statistics_OK"
+  /cases/basic_statistics:
+    get:
+      summary: Get basic-statistics of today
+      description: Returns the basic statistics of today
+      operationId: get-statistics-today
+      deprecated: false
+      produces:
+        - application/json
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /cases/{year}/{month}/{day}:
+    get:
+      summary: get-cases
+      tags:
+        - Misc
+      operationId: get-cases
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+      - name: "year"
+        in: "path"
+        description: "Year of searched date. "
+        required: true
+        type: number
+      - name: "month"
+        in: "path"
+        description: "Month of searched date. "
+        required: true
+        type: number
+      - name: "day"
+        in: "path"
+        description: "Day of searched date. "
+        required: true
+        type: number
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /cases:
+    get:
+      summary: Get global cases statistics of today
+      description: Returns global cases statistics of today
+      operationId: get-cases-today
+      deprecated: false
+      produces:
+        - application/json
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /cases/country/{country}:
+    get:
+      summary: get-cases-country
+      operationId: get-cases-country
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: country
+          in: path
+          required: true
+          type: string
+          description: "Country"
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /cases/country/{country}/growth:
+    get:
+      summary: get-cases-country-growth
+      description: Returns the growth statistic of certain country
+      operationId: get-cases-country-growth
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: country
+          in: path
+          required: true
+          type: string
+          description: "Country"
+      responses:
+        '200':
+          description: ''
+          
+definitions:
+  Response_get_statistics_OK:
+    type: object
+    properties:
+      toDo:
+        type: 'string'
+        example: 'I have to make all this'
+  
