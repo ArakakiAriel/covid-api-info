@@ -23,9 +23,9 @@ module.exports.getCasesPerDate = async (req, res, next) => {
             let normalizedCountriesCases = normalizeCountries(config.bigQuery.countries_to_normalize, "aux");
             let normalizedCountriesCases2 = normalizeCountries(config.bigQuery.countries_to_normalize, "c");
             const sqlQuery = `SELECT cases.country_region as country, (SUM(cases.latitude * cases.confirmed)/SUM(cases.confirmed)) as latitude, 
-            (SUM(cases.longitude * cases.confirmed)/SUM(cases.confirmed)) as longitude,SUM(COALESCE(cases.confirmed, 0)) as total_confirmed, 
-            SUM(COALESCE(cases.deaths, 0)) as total_deaths, SUM(COALESCE(cases.recovered, 0)) as total_recovered, 
-            SUM(COALESCE(cases.active, 0)) as total_active_cases, MAX(cases.date) as updated_date
+            (SUM(cases.longitude * cases.confirmed)/SUM(cases.confirmed)) as longitude,SUM(COALESCE(CAST(cases.confirmed AS INT64), 0)) as total_confirmed, 
+            SUM(COALESCE(CAST(cases.deaths AS INT64), 0)) as total_deaths, SUM(COALESCE(CAST(cases.recovered AS INT64), 0)) as total_recovered, 
+            SUM(COALESCE(CAST(cases.active AS INT64), 0)) as total_active_cases, MAX(cases.date) as updated_date
             FROM
                 (SELECT ${normalizedCountriesCases} as country_region, aux.latitude, aux.longitude,aux.confirmed,aux.deaths,aux.recovered,
                 aux.active,aux.date

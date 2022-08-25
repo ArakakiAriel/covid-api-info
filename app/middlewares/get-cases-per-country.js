@@ -20,9 +20,9 @@ module.exports.getCasesPerCountry = async (req, res, next) => {
             // The SQL query to run
             let normalizedCountries = normalizeCountries(config.bigQuery.countries_to_normalize, 'cases');
             let sqlQuery = `SELECT ${normalizedCountries} AS country, (SUM(cases.latitude)/COUNT(cases.latitude)) as latitude, 
-            (SUM(cases.longitude)/COUNT(cases.longitude)) as longitude, SUM(COALESCE(cases.confirmed, 0)) as total_confirmed, 
-            SUM(COALESCE(cases.deaths, 0)) as total_deaths, SUM(COALESCE(cases.recovered, 0)) as total_recovered, 
-            SUM(COALESCE(cases.active, 0)) as total_active_cases, cases.date as updated_date
+            (SUM(cases.longitude)/COUNT(cases.longitude)) as longitude, SUM(COALESCE(CAST(cases.confirmed as INT64), 0)) as total_confirmed, 
+            SUM(COALESCE(CAST(cases.deaths as INT64), 0)) as total_deaths, SUM(COALESCE(CAST(cases.recovered as INT64), 0)) as total_recovered, 
+            SUM(COALESCE(CAST(cases.active as INT64), 0)) as total_active_cases, cases.date as updated_date
             FROM \`bigquery-public-data.covid19_jhu_csse.summary\` cases
             WHERE  upper(${normalizedCountries}) =  '${country}'
             GROUP BY country, updated_date
